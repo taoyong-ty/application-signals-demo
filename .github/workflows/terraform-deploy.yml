@@ -67,6 +67,11 @@ jobs:
 
       - name: Create Topology Data Folder
         run: mkdir -p ./topology
+      
+      - name: Collect Code-to-Cloud Topology
+        run: |
+          git status
+          ./collect-commit-info.sh
 
       - name: Generate Software Dependency Topology
         uses: anchore/sbom-action@v0
@@ -86,11 +91,6 @@ jobs:
           name: terraform.graph.json
           path: |
             ./topology/terraform.graph.json
-      
-      - name: Collect Code-to-Cloud Topology
-        run: |
-          git status
-          ./collect-commit-info.sh
       
       - name: Publish Topology
         run: ls -l ./topology/
