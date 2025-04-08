@@ -52,8 +52,8 @@ if git rev-parse HEAD &>/dev/null; then
   COMMIT_MESSAGE=$(git show -s --format='%B' $COMMIT_ID)
   
   # Get commit diff
-  COMMIT_DIFF=$(git show $COMMIT_ID)
-  
+  COMMIT_DIFF=$(git format-patch -1 $COMMIT_ID --stdout)
+
   # Create commit entity properties as JSON string
   COMMIT_PROPS=$(cat << EOF
 {
