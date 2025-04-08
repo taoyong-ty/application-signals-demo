@@ -71,6 +71,7 @@ jobs:
       - name: Collect Code-to-Cloud Topology
         run: |
           git status
+          git diff ${{github.event.before}} ${{github.sha}}
           ./collect-commit-info.sh
 
       - name: Generate Software Dependency Topology
