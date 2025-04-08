@@ -72,6 +72,7 @@ jobs:
       - name: Generate Software Dependency Topology
         uses: anchore/sbom-action@v0
         with:
+          format: cyclonedx-json
           artifact-name: application-signals-demo.cyclonedx.json
           path: .
           output-file: './topology/application-signals-demo.cyclonedx.json'
@@ -79,6 +80,13 @@ jobs:
       - name: Generate IaC Topology
         working-directory: terraform/eks
         run: terraform graph > ../../topology/terraform.graph.json
+
+      - name: Archive IaC Topology
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform.graph.json
+          path: |
+            ./topology/terraform.graph.json
       
       - name: Collect Code-to-Cloud Topology
         run: |
