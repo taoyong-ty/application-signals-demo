@@ -70,11 +70,16 @@ jobs:
       - name: Create Topology Data Folder
         run: mkdir -p ./topology
       
-      - name: Collect Code-to-Cloud Topology
+      - name: Generate Code-to-Cloud Topology
         run: |
-          git status
-          git diff ${{github.event.before}} ${{github.sha}}
           ./collect-commit-info.sh
+
+      - name: Archive Code-to-Cloud Topology
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform.graph.json
+          path: |
+            ./topology/commit-info.json
 
       - name: Generate Software Dependency Topology
         uses: anchore/sbom-action@v0
