@@ -24,6 +24,10 @@ add_entity() {
   
   # Escape JSON special characters in properties
   properties=$(echo "$properties" | sed 's/"/\\"/g' | sed 's/\\/\\\\/g' | sed ':a;N;$!ba;s/\n/\\n/g')
+
+  echo $type
+  echo $id
+  echo $properties
   
   # Add entity to JSON
   jq --arg type "$type" --arg id "$id" --arg props "$properties" '.entities += [{"type": $type, "id": $id, "properties": $props}]' $OUTPUT_FILE > tmp.json && mv tmp.json $OUTPUT_FILE
