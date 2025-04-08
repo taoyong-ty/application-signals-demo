@@ -90,6 +90,7 @@ jobs:
       
       - name: Collect Code-to-Cloud Topology
         run: |
+          git status
           ./collect-commit-info.sh
       
       - name: Publish Topology
