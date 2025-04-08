@@ -75,6 +75,9 @@ jobs:
           ./collect-commit-info.sh
 
       - name: Archive Code-to-Cloud Topology
+        env:
+          MOST_RECENT_SHA: ${{github.event.before}} 
+          CURRENT_SHA: ${{github.sha}}
         uses: actions/upload-artifact@v4
         with:
           name: terraform.graph.json

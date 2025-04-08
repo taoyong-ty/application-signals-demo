@@ -52,9 +52,9 @@ if git rev-parse HEAD &>/dev/null; then
   COMMIT_MESSAGE=$(git show -s --format='%B' $COMMIT_ID)
   
   # Get commit diff
-  echo $GITHUB_BASE_REF
-  echo $GITHUB_HEAD_REF
-  COMMIT_DIFF=$(git diff ${{github.event.before}} ${{github.sha}})
+  echo $MOST_RECENT_SHA
+  echo $CURRENT_SHA
+  COMMIT_DIFF=$(git diff $MOST_RECENT_SHA $CURRENT_SHA)
 
   # Create commit entity properties as JSON string
   COMMIT_PROPS=$(cat << EOF
