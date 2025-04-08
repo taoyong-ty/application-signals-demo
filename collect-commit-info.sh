@@ -4,9 +4,18 @@ set -e
 # Script to collect git commit information and output as JSON
 # For use in GitHub Actions workflows
 
+# Accept parameters for commit SHAs
+MOST_RECENT_SHA=${1:-$MOST_RECENT_SHA}
+CURRENT_SHA=${2:-$CURRENT_SHA}
+
 OUTPUT_FILE="./topology/commit-info.json"
 
 echo "Collecting git commit information..."
+echo "Most recent SHA: $MOST_RECENT_SHA"
+echo "Current SHA: $CURRENT_SHA"
+
+# Create output directory if it doesn't exist
+mkdir -p ./topology
 
 # Initialize JSON structure
 cat > $OUTPUT_FILE << EOF

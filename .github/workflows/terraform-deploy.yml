@@ -72,12 +72,9 @@ jobs:
       
       - name: Generate Code-to-Cloud Topology
         run: |
-          ./collect-commit-info.sh
+          ./collect-commit-info.sh "${{github.event.before}}" "${{github.sha}}"
 
       - name: Archive Code-to-Cloud Topology
-        env:
-          MOST_RECENT_SHA: ${{github.event.before}} 
-          CURRENT_SHA: ${{github.sha}}
         uses: actions/upload-artifact@v4
         with:
           name: terraform.graph.json
