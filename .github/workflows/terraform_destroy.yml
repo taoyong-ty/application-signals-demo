@@ -62,4 +62,4 @@ jobs:
 
       - name: Terraform Apply
         working-directory: terraform/eks
-        run: terraform destory --auto-approve
+        run: terraform destroy --auto-approve
