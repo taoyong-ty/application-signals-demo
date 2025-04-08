@@ -52,8 +52,8 @@ if git rev-parse HEAD &>/dev/null; then
   COMMIT_MESSAGE=$(git show -s --format='%B' $COMMIT_ID)
   
   # Get commit diff
-  echo $MOST_RECENT_SHA
-  echo $CURRENT_SHA
+  echo "Most recent sha $MOST_RECENT_SHA"
+  echo "current sha $CURRENT_SHA"
   COMMIT_DIFF=$(git diff $MOST_RECENT_SHA $CURRENT_SHA)
 
   # Create commit entity properties as JSON string
