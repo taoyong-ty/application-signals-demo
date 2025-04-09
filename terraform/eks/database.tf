@@ -154,3 +154,33 @@ resource "aws_dynamodb_table" "payment_table" {
   }
 
 }
+
+
+resource "aws_dynamodb_table" "cat_table" {
+  #checkov:skip=CKV2_AWS_16:demo only, autoscaling is not needed
+  #checkov:skip=CKV_AWS_119:demo only, no encryption is needed
+
+  name           = "CatTable"
+  billing_mode   = "PAY_PER_REQUEST"
+  hash_key       = "catId"
+  range_key      = "timestamp"
+
+  point_in_time_recovery {
+   enabled = false
+  }
+
+  # server_side_encryption {
+  #   enabled     = true
+  # }
+
+  attribute {
+    name = "catId"
+    type = "S"
+  }
+
+  attribute {
+    name = "timestamp"
+    type = "S"
+  }
+
+}
