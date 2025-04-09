@@ -32,5 +32,5 @@ resource "aws_cloudwatch_log_group" "appsignals_log_group" {
   #checkov:skip=CKV_AWS_158:Only for demo, no encryption required
 
   name = "/aws/appsignals/eks"
-  retention_in_days = 28
+  retention_in_days = 30
 }
