@@ -111,15 +111,7 @@ jobs:
           
           # Upload terraform.state.json
           aws s3 cp ./topology/terraform.state.json s3://${{ env.TOPOLOGY_BUCKET }}/terraform.state.json/${{ github.sha }}/
-      
-      - name: Build Docker images
-        run: ./mvnw clean install -P buildDocker
-        
-      - name: Push Docker images to ECR
-        run: |
-          export ACCOUNT=$(aws sts get-caller-identity | jq .Account -r)
-          export REGION=${{ env.AWS_REGION }}
-          ./push-ecr.sh
+    
       
       - name: Create kubeconfig directory
         run: mkdir -p ${{ github.workspace }}/.kube
@@ -129,11 +121,6 @@ jobs:
 
       - name: Set up kubeconfig
         run: aws eks update-kubeconfig --name ${{ env.TF_VAR_cluster_name }} --region ${{ env.AWS_REGION }} --alias ${{ env.TF_VAR_cluster_name }}
-
-      - name: Deploy Kubernetes resources
-        run: |
-          aws eks update-kubeconfig --name ${{ env.TF_VAR_cluster_name }} --kubeconfig ~/.kube/config --region ${{ env.AWS_REGION }} --alias ${{ env.TF_VAR_cluster_name }}
-          ./scripts/eks/appsignals/tf-deploy-k8s-res.sh
       
       - name: Upload Application Topology Files to S3
         run: |          
@@ -148,12 +135,6 @@ jobs:
           fi
           
           echo "Topology files uploaded to S3 bucket '${{ env.TOPOLOGY_BUCKET }}' with commit ID ${{ github.sha }} as prefix"
-
-      - name: Create Canaries and SLOs
-        run: |
-          endpoint="http://$(kubectl get ingress -o json --output jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}')"
-          cd scripts/eks/appsignals/
-          ./create-canaries.sh ${{ env.AWS_REGION }} create $endpoint
 
       - name: Output Application URL
         run: |
