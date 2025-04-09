@@ -82,13 +82,13 @@ resource "aws_dynamodb_table" "billing_table" {
 
   name           = "BillingInfo"
   billing_mode   = "PROVISIONED"
-  read_capacity  = 2
-  write_capacity = 2
+  read_capacity  = 1
+  write_capacity = 1
   hash_key       = "ownerId"
   range_key      = "timestamp"
 
   point_in_time_recovery {
-   enabled = true
+   enabled = false
   }
 
   # server_side_encryption {
