@@ -13,6 +13,7 @@ env: # hard-code resource names
   TFSTATE_REGION: us-east-1
   TF_VAR_cluster_name: app-signals-demo
   TF_VAR_cloudwatch_observability_addon_version: v3.6.0-eksbuild.2
+  TOPOLOGY_BUCKET: cicd-topology
 
 permissions:
   id-token: write
@@ -102,6 +103,14 @@ jobs:
           path: |
             ./topology/terraform.graph.json
             ./topology/terraform.state.json
+            
+      - name: Upload IaC Topology Files to S3
+        run: |
+          # Upload terraform.graph.json
+          aws s3 cp ./topology/terraform.graph.json s3://${{ env.TOPOLOGY_BUCKET }}/terraform.graph.json/${{ github.sha }}/
+          
+          # Upload terraform.state.json
+          aws s3 cp ./topology/terraform.state.json s3://${{ env.TOPOLOGY_BUCKET }}/terraform.state.json/${{ github.sha }}/
       
       - name: Build Docker images
         run: ./mvnw clean install -P buildDocker
@@ -125,6 +134,20 @@ jobs:
         run: |
           aws eks update-kubeconfig --name ${{ env.TF_VAR_cluster_name }} --kubeconfig ~/.kube/config --region ${{ env.AWS_REGION }} --alias ${{ env.TF_VAR_cluster_name }}
           ./scripts/eks/appsignals/tf-deploy-k8s-res.sh
+      
+      - name: Upload Application Topology Files to S3
+        run: |          
+          # Upload SBOM if available
+          if [ -f "./topology/application-signals-demo.cyclonedx.json" ]; then
+            aws s3 cp ./topology/application-signals-demo.cyclonedx.json s3://${{ env.TOPOLOGY_BUCKET }}/cyclonedx.json/${{ github.sha }}/
+          fi
+          
+          # Upload commit info if available
+          if [ -f "./topology/commit-info.json" ]; then
+            aws s3 cp ./topology/commit-info.json s3://${{ env.TOPOLOGY_BUCKET }}/commit-info.json/${{ github.sha }}/
+          fi
+          
+          echo "Topology files uploaded to S3 bucket '${{ env.TOPOLOGY_BUCKET }}' with commit ID ${{ github.sha }} as prefix"
 
       - name: Create Canaries and SLOs
         run: |
