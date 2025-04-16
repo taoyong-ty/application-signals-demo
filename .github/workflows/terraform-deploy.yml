@@ -50,6 +50,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          role-session-name: ${{ env.GITHUB_REPOSITORY }}@${{ env.GITHUB_RUN_ID }}@${{ env.GITHUB_JOB }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Set up terraform
