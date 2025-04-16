@@ -136,7 +136,7 @@ resource "aws_dynamodb_table" "payment_table" {
 
   name           = "PetClinicPayment"
   billing_mode   = "PROVISIONED"
-  read_capacity  = 1
+  read_capacity  = 2
   write_capacity = 1
   hash_key       = "id"
 
