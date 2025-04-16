@@ -46,6 +46,19 @@ jobs:
       - name: Install jq
         run: sudo apt-get update && sudo apt-get install -y jq
 
+      - name: Preprocess GitHub repository name
+        id: preprocess
+        run: |
+          REPO_NAME=$(echo "${{ github.repository }}" | tr '/' '@')
+          echo "repo_name=$REPO_NAME" >> $GITHUB_OUTPUT
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          role-session-name: ${{ steps.preprocess.outputs.repo_name }}@${{ github.run_id }}@${{ github.job }}
+          aws-region: ${{ env.AWS_REGION }}
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
