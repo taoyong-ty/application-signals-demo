@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CLUSTER_NAME=${1:-"python-apm-demo"}
+CLUSTER_NAME=${1:-"application-signals-demo"}
 REGION=${2:-"us-east-1"}
 NAMESPACE=${3:-"default"}
 OPERATION=${4:-"apply"}
@@ -18,9 +18,11 @@ port=$(echo $db_endpoint | awk -F ':' '{print $2}')
 
 cd ../../scripts/eks/appsignals/
 
-echo $KUBECONFIG
-sed -e "s/111122223333.dkr.ecr.us-west-2/$ACCOUNT_ID.dkr.ecr.$REGION/g" -e 's#\${REGION}'"#${REGION}#g" -e 's#\${DB_SERVICE_HOST}'"#${host}#g" /home/runner/work/application-signals-demo/application-signals-demo/.kube/config | kubectl ${OPERATION} --namespace=$NAMESPACE -f -
-
+for config in $(ls ./sample-app/*.yaml)
+do
+    sed -e "s/111122223333.dkr.ecr.us-west-2/$ACCOUNT_ID.dkr.ecr.$REGION/g" -e 's#\${REGION}'"#${REGION}#g" -e 's#\${DB_SERVICE_HOST}'"#${host}#g" $config | kubectl ${OPERATION} --namespace=$NAMESPACE -f -
+    cat $config
+done
 
 sleep 60s
 
