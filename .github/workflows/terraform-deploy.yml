@@ -131,11 +131,12 @@ jobs:
       - name: Set up kubeconfig
         run: aws eks update-kubeconfig --name ${{ env.TF_VAR_cluster_name }} --region ${{ env.AWS_REGION }} --alias ${{ env.TF_VAR_cluster_name }}
 
+      - name: install EKSCTL
+        uses: moia-oss/setup-eksctl@v2
       - name: Run kubectl commands
         run: |
-          cat /home/runner/work/application-signals-demo/application-signals-demo/.kube/config
+          eksctl create iamidentitymapping --cluster app-signals-demo --region=us-east-1 --arn arn:aws:iam::279467130036:role/Admin --group system:masters --username admin/arn:aws:iam::279467130036:role/Admin
           ./scripts/eks/appsignals/tf-deploy-k8s-res.sh
-          cat /home/runner/work/application-signals-demo/application-signals-demo/.kube/config
       
       - name: Upload Application Topology Files to S3
         run: |          
