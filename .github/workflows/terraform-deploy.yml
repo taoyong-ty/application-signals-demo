@@ -133,7 +133,9 @@ jobs:
 
       - name: Run kubectl commands
         run: |
+          cat /home/runner/work/application-signals-demo/application-signals-demo/.kube/config
           ./scripts/eks/appsignals/tf-deploy-k8s-res.sh
+          cat /home/runner/work/application-signals-demo/application-signals-demo/.kube/config
       
       - name: Upload Application Topology Files to S3
         run: |          
