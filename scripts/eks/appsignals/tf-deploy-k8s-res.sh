@@ -19,7 +19,7 @@ port=$(echo $db_endpoint | awk -F ':' '{print $2}')
 cd ../../scripts/eks/appsignals/
 
 echo $KUBECONFIG
-sed -e "s/111122223333.dkr.ecr.us-west-2/$ACCOUNT_ID.dkr.ecr.$REGION/g" -e 's#\${REGION}'"#${REGION}#g" -e 's#\${DB_SERVICE_HOST}'"#${host}#g" ${KUBECONFIG} | kubectl ${OPERATION} --namespace=$NAMESPACE -f -
+sed -e "s/111122223333.dkr.ecr.us-west-2/$ACCOUNT_ID.dkr.ecr.$REGION/g" -e 's#\${REGION}'"#${REGION}#g" -e 's#\${DB_SERVICE_HOST}'"#${host}#g" /home/runner/work/application-signals-demo/application-signals-demo/.kube/config | kubectl ${OPERATION} --namespace=$NAMESPACE -f -
 
 
 sleep 60s
