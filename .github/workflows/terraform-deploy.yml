@@ -120,7 +120,7 @@ jobs:
         run: |
           export ACCOUNT=$(aws sts get-caller-identity | jq .Account -r)
           export REGION=${{ env.AWS_REGION }}
-          ./push-ecr.sh
+          # ./push-ecr.sh
       
       - name: Create kubeconfig directory
         run: mkdir -p ${{ github.workspace }}/.kube
